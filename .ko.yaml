@@ -1,4 +1,4 @@
-defaultBaseImage: docker.io/jrottenberg/ffmpeg:6.1-alpine
+defaultBaseImage: lscr.io/linuxserver/ffmpeg:latest
 builds:
   - id: vnc-recorder
     main: ./cmd/vnc-recorder

@@ -58,7 +58,7 @@ task build
 task image
 ```
 
-`ko` uses `.ko.yaml` with `docker.io/jrottenberg/ffmpeg:6.1-alpine` as the base image, so `ffmpeg` is included in the final image.
+`ko` uses `.ko.yaml` with `lscr.io/linuxserver/ffmpeg:latest` as the base image, so `ffmpeg` is included in the final image and can be published as a multi-arch image (`linux/amd64`, `linux/arm64`).
 
 ## Release
 

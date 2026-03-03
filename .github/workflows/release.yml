@@ -41,7 +41,7 @@ jobs:
         run: |
           REPO_LC="$(echo "$REPOSITORY" | tr '[:upper:]' '[:lower:]')"
           export KO_DOCKER_REPO="ghcr.io/${REPO_LC}"
-          ko build --platform=all --bare --sbom=none --tags "${TAG},latest" ./cmd/vnc-recorder
+          ko build --platform=linux/amd64,linux/arm64 --bare --sbom=none --tags "${TAG},latest" ./cmd/vnc-recorder
 
       - name: Build binaries for release
         run: |
