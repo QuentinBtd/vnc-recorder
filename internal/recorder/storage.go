@@ -31,7 +31,15 @@ func newUploader(ctx context.Context, cfg Config) (Uploader, error) {
 		return noOpUploader{}, nil
 	}
 
-	awsCfg, err := awsconfig.LoadDefaultConfig(ctx)
+	loadOpts := make([]func(*awsconfig.LoadOptions) error, 0, 2)
+	if cfg.AWSRegion != "" {
+		loadOpts = append(loadOpts, awsconfig.WithRegion(cfg.AWSRegion))
+	}
+	if cfg.AWSProfile != "" {
+		loadOpts = append(loadOpts, awsconfig.WithSharedConfigProfile(cfg.AWSProfile))
+	}
+
+	awsCfg, err := awsconfig.LoadDefaultConfig(ctx, loadOpts...)
 	if err != nil {
 		return nil, fmt.Errorf("load aws config: %w", err)
 	}

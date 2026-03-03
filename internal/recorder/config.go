@@ -31,6 +31,8 @@ type Config struct {
 	UploadToS3              bool
 	S3Bucket                string
 	S3Prefix                string
+	AWSRegion               string
+	AWSProfile              string
 	SessionID               string
 }
 
@@ -53,6 +55,8 @@ func LoadConfig(args []string, getenv func(string) string) (Config, error) {
 		FFmpegPath:              fromEnv(getenv, "FFMPEG_PATH", "ffmpeg"),
 		S3Bucket:                fromEnv(getenv, "S3_BUCKET", ""),
 		S3Prefix:                fromEnv(getenv, "S3_PREFIX", ""),
+		AWSRegion:               fromEnv(getenv, "AWS_REGION", ""),
+		AWSProfile:              fromEnv(getenv, "AWS_PROFILE", ""),
 	}
 
 	if raw := getenv("UPLOAD_S3"); raw != "" {
@@ -81,6 +85,8 @@ func LoadConfig(args []string, getenv func(string) string) (Config, error) {
 	fs.BoolVar(&cfg.UploadToS3, "upload-s3", cfg.UploadToS3, "Upload outputs to S3")
 	fs.StringVar(&cfg.S3Bucket, "s3-bucket", cfg.S3Bucket, "S3 bucket")
 	fs.StringVar(&cfg.S3Prefix, "s3-prefix", cfg.S3Prefix, "S3 key prefix")
+	fs.StringVar(&cfg.AWSRegion, "aws-region", cfg.AWSRegion, "AWS region override")
+	fs.StringVar(&cfg.AWSProfile, "aws-profile", cfg.AWSProfile, "AWS shared profile override")
 	if err := fs.Parse(args); err != nil {
 		return Config{}, err
 	}

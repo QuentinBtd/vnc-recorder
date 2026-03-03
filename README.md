@@ -34,6 +34,11 @@ Each option can be configured with an environment variable and overridden by a C
 | `UPLOAD_S3` | `--upload-s3` | `true` if `S3_BUCKET` is set |
 | `S3_BUCKET` | `--s3-bucket` | `` |
 | `S3_PREFIX` | `--s3-prefix` | `` |
+| `AWS_REGION` | `--aws-region` | SDK default chain |
+| `AWS_PROFILE` | `--aws-profile` | SDK default chain |
+
+When running in Kubernetes with IRSA, prefer role-based auth (no `AWS_PROFILE`).
+`AWS_PROFILE` only works if shared config/credentials files are mounted in the container.
 
 ### Local recording modes
 

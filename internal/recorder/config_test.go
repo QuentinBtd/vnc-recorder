@@ -15,6 +15,8 @@ func TestLoadConfig_EnvDefaultsAndFlagOverride(t *testing.T) {
 		"SEGMENT_DURATION": "120",
 		"S3_BUCKET":        "bucket-a",
 		"S3_PREFIX":        "captures",
+		"AWS_REGION":       "eu-west-1",
+		"AWS_PROFILE":      "work",
 	}
 
 	getenv := func(k string) string {
@@ -43,6 +45,12 @@ func TestLoadConfig_EnvDefaultsAndFlagOverride(t *testing.T) {
 	}
 	if cfg.S3Prefix != "captures/" {
 		t.Fatalf("S3Prefix = %q, want captures/", cfg.S3Prefix)
+	}
+	if cfg.AWSRegion != "eu-west-1" {
+		t.Fatalf("AWSRegion = %q, want eu-west-1", cfg.AWSRegion)
+	}
+	if cfg.AWSProfile != "work" {
+		t.Fatalf("AWSProfile = %q, want work", cfg.AWSProfile)
 	}
 }
 
