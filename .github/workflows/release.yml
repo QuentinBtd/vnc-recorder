@@ -22,8 +22,6 @@ jobs:
           go-version: "1.24"
           cache: true
 
-      - uses: ko-build/setup-ko@v0.8
-
       - name: Run tests
         run: go test ./...
 
@@ -34,14 +32,25 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and publish image with ko
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and publish Docker image
         env:
           REPOSITORY: ${{ github.repository }}
           TAG: ${{ github.ref_name }}
         run: |
           REPO_LC="$(echo "$REPOSITORY" | tr '[:upper:]' '[:lower:]')"
-          export KO_DOCKER_REPO="ghcr.io/${REPO_LC}"
-          ko build --platform=linux/amd64,linux/arm64 --bare --sbom=none --tags "${TAG},latest" ./cmd/vnc-recorder
+          IMAGE="ghcr.io/${REPO_LC}"
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --tag "${IMAGE}:${TAG}" \
+            --tag "${IMAGE}:latest" \
+            --push \
+            .
 
       - name: Build binaries for release
         run: |

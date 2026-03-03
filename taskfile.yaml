@@ -16,9 +16,9 @@ tasks:
       - go build -o dist/vnc-recorder {{.APP}}
 
   image:
-    desc: Build local OCI image with ko
+    desc: Build local Docker image
     cmds:
-      - ko build --bare --push=false {{.APP}}
+      - docker build -t vnc-recorder:local .
 
   run:
     desc: Run recorder locally

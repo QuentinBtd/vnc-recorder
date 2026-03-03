@@ -5,13 +5,13 @@ VNC recorder written in Go with:
 - frame capture through a Go VNC client (not `ffmpeg -f vnc`),
 - local output as a single file or segmented files,
 - optional S3 upload,
-- container image builds with `ko`.
+- container image builds with Docker (Alpine + `ffmpeg` via `apk`).
 
 ## Prerequisites
 
 - Go 1.24+
 - `ffmpeg` available in `PATH` (or via `FFMPEG_PATH`)
-- `ko` for OCI image builds
+- Docker with Buildx (for multi-arch image builds)
 - `task` (https://taskfile.dev)
 
 ## Configuration
@@ -58,19 +58,19 @@ task test
 task build
 ```
 
-## Build image with ko
+## Build image
 
 ```bash
 task image
 ```
 
-`ko` uses `.ko.yaml` with `docker.io/mwader/static-ffmpeg:7.1.1` as the base image, so `ffmpeg` is included in the final image and can be published as a multi-arch image (`linux/amd64`, `linux/arm64`) with a smaller footprint.
+The image uses `alpine:3.21` and installs `ffmpeg` with `apk`, then copies the `vnc-recorder` binary.
 
 ## Release
 
 A GitHub Actions workflow automatically publishes:
 - binaries (`linux`, `macOS`, `windows`) to a GitHub Release,
-- an OCI image to GHCR via `ko` (with `ffmpeg` included),
+- a multi-arch OCI image (`linux/amd64`, `linux/arm64`) to GHCR,
 - release notes changelog generated from commits between the previous and current tag.
 
 Trigger: push a `v*` tag (for example `v1.0.0`).
