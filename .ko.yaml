@@ -1,4 +1,4 @@
-defaultBaseImage: lscr.io/linuxserver/ffmpeg:latest
+defaultBaseImage: docker.io/mwader/static-ffmpeg:7.1.1
 builds:
   - id: vnc-recorder
     main: ./cmd/vnc-recorder

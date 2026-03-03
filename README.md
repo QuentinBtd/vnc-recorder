@@ -39,6 +39,7 @@ Each option can be configured with an environment variable and overridden by a C
 
 When running in Kubernetes with IRSA, prefer role-based auth (no `AWS_PROFILE`).
 `AWS_PROFILE` only works if shared config/credentials files are mounted in the container.
+In the default container image, `/ffmpeg` is auto-detected if `ffmpeg` is not in `PATH`.
 
 ### Local recording modes
 
@@ -63,7 +64,7 @@ task build
 task image
 ```
 
-`ko` uses `.ko.yaml` with `lscr.io/linuxserver/ffmpeg:latest` as the base image, so `ffmpeg` is included in the final image and can be published as a multi-arch image (`linux/amd64`, `linux/arm64`).
+`ko` uses `.ko.yaml` with `docker.io/mwader/static-ffmpeg:7.1.1` as the base image, so `ffmpeg` is included in the final image and can be published as a multi-arch image (`linux/amd64`, `linux/arm64`) with a smaller footprint.
 
 ## Release
 

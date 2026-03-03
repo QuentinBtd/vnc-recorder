@@ -29,9 +29,11 @@ func NewRunner(cfg Config, logger *log.Logger) *Runner {
 }
 
 func (r *Runner) Run(ctx context.Context) error {
-	if err := ensureFFmpegAvailable(r.cfg.FFmpegPath); err != nil {
+	ffmpegPath, err := resolveFFmpegPath(r.cfg.FFmpegPath)
+	if err != nil {
 		return err
 	}
+	r.cfg.FFmpegPath = ffmpegPath
 	if err := os.MkdirAll(r.cfg.OutputDir, 0o755); err != nil {
 		return fmt.Errorf("create output dir: %w", err)
 	}
@@ -196,13 +198,23 @@ func writeFrame(path string, src image.Image) error {
 }
 
 func ensureFFmpegAvailable(ffmpegPath string) error {
+	_, err := resolveFFmpegPath(ffmpegPath)
+	return err
+}
+
+func resolveFFmpegPath(ffmpegPath string) (string, error) {
 	if ffmpegPath == "" {
 		ffmpegPath = "ffmpeg"
 	}
-	if _, err := exec.LookPath(ffmpegPath); err != nil {
-		return fmt.Errorf("ffmpeg binary %q not found in image/path: %w", ffmpegPath, err)
+	if p, err := exec.LookPath(ffmpegPath); err == nil {
+		return p, nil
 	}
-	return nil
+	if ffmpegPath == "ffmpeg" {
+		if _, err := os.Stat("/ffmpeg"); err == nil {
+			return "/ffmpeg", nil
+		}
+	}
+	return "", fmt.Errorf("ffmpeg binary %q not found in image/path", ffmpegPath)
 }
 
 func isCtxDoneErr(err error) bool {
