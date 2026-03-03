@@ -11,7 +11,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 	"time"
 
 	vnc "github.com/amitbet/vnc2video"
@@ -77,15 +76,6 @@ func (r *Runner) captureAndEncode(ctx context.Context, framesDir string, uploade
 			}
 			return nil
 		case err := <-session.errorCh:
-			if isUnsupportedEncodingErr(err) {
-				r.logger.Printf("vnc stream error: %v", err)
-				if flushErr := flushPendingSegment(frameCount, segmentStartFrame, func() error {
-					return r.encodeAndUpload(uploader, framePattern, segmentStartFrame, frameCount-segmentStartFrame, segmentID)
-				}); flushErr != nil {
-					return flushErr
-				}
-				return fmt.Errorf("unsupported VNC encoding from server: %w", err)
-			}
 			r.logger.Printf("vnc stream error: %v, reconnecting", err)
 			session.Close()
 			session, err = r.connectWithRetry(ctx)
@@ -217,13 +207,6 @@ func ensureFFmpegAvailable(ffmpegPath string) error {
 
 func isCtxDoneErr(err error) bool {
 	return errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded)
-}
-
-func isUnsupportedEncodingErr(err error) bool {
-	if err == nil {
-		return false
-	}
-	return strings.Contains(strings.ToLower(err.Error()), "unsupported encoding")
 }
 
 func flushPendingSegment(frameCount int, segmentStartFrame int, encode func() error) error {

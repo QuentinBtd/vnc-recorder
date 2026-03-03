@@ -1,7 +1,6 @@
 package recorder
 
 import (
-	"errors"
 	"testing"
 )
 
@@ -42,13 +41,5 @@ func TestFlushPendingSegment(t *testing.T) {
 	}
 	if !called {
 		t.Fatal("encode should be called when pending frames exist")
-	}
-}
-
-func TestIsUnsupportedEncodingErr(t *testing.T) {
-	t.Parallel()
-
-	if !isUnsupportedEncodingErr(errors.New("unsupported encoding EncodingType(393216)")) {
-		t.Fatal("expected unsupported encoding error to be detected")
 	}
 }

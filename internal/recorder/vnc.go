@@ -37,9 +37,6 @@ func connectVNC(ctx context.Context, cfg Config) (*vncSession, error) {
 
 	encodings := []vnc.Encoding{
 		&vnc.RawEncoding{},
-		&vnc.CopyRectEncoding{},
-		&vnc.CursorPseudoEncoding{},
-		&vnc.CursorPosPseudoEncoding{},
 	}
 
 	vncCfg := &vnc.ClientConfig{

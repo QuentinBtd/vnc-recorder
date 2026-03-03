@@ -76,6 +76,12 @@ Trigger: push a `v*` tag (for example `v1.0.0`).
 
 On pull requests, the `changelog-linter` workflow validates changelog updates (`CHANGELOG.md`, `## tip`) unless only docs/CI/meta files changed.
 
+## Kubernetes + AWS notes
+
+- In EKS with IRSA, prefer role-based auth and set `AWS_REGION`.
+- `AWS_PROFILE` works only if shared AWS config/credentials files are mounted inside the container.
+- VNC capture requests `Raw` encoding for maximum compatibility across VNC servers.
+
 ## Example run
 
 ```bash
