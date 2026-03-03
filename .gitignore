@@ -1,0 +1,31 @@
+CLAUDE.md
+
+# Build artifacts
+dist/
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go tooling
+coverage.out
+*.coverprofile
+
+# Runtime outputs
+/tmp/vnc-recordings/
+/tmp/vnc-frames/
+
+# Environment files
+.env
+.env.*
+
+# IDE/editor
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db

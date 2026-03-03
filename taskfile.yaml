@@ -1,0 +1,26 @@
+version: '3'
+
+vars:
+  APP: ./cmd/vnc-recorder
+
+tasks:
+  test:
+    desc: Run Go tests
+    cmds:
+      - go test ./...
+
+  build:
+    desc: Build local binary
+    cmds:
+      - mkdir -p dist
+      - go build -o dist/vnc-recorder {{.APP}}
+
+  image:
+    desc: Build local OCI image with ko
+    cmds:
+      - ko build --bare --push=false {{.APP}}
+
+  run:
+    desc: Run recorder locally
+    cmds:
+      - go run {{.APP}} {{.CLI_ARGS}}
