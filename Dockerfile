@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine AS builder
+FROM golang:1.26-alpine AS builder
 
 WORKDIR /src
 
@@ -13,7 +13,7 @@ COPY internal ./internal
 
 RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o /out/vnc-recorder ./cmd/vnc-recorder
 
-FROM alpine:3.21
+FROM alpine:3.23
 
 RUN apk add --no-cache ffmpeg ca-certificates tzdata \
   && addgroup -S app \
